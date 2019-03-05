@@ -1,0 +1,3 @@
+(executables
+ (names client_example)
+ (libraries core async fetch uri))
