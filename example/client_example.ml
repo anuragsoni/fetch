@@ -2,9 +2,10 @@ open Core
 open Async
 open Fetch
 
-let main port host () =
+let main port m host () =
+  let m' = Httpaf.Method.of_string m in
   let u = Uri.with_port (Uri.of_string host) (Some port) in
-  Request.create `GET u
+  Request.create m' u
   |> Request.run
   |> Request.as_string
   >>| fun resp -> print_endline resp
@@ -16,6 +17,7 @@ let () =
     Command.Spec.(
       empty
       +> flag "-p" (optional_with_default 80 int) ~doc:"int destination port"
+      +> flag "-m" (required string) ~doc:"string HTTP method"
       +> flag "-h" (required string) ~doc:"string destination host")
     main
   |> Command.run
