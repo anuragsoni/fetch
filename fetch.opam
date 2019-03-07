@@ -1,0 +1,21 @@
+opam-version: "2.0"
+maintainer: "Anurag Soni <anurag@sonianurag.com>"
+authors: ["Anurag Soni <anurag@sonianurag.com>"]
+license: "MIT"
+homepage: "https://github.com/anuragsoni/fetch"
+bug-reports: "https://github.com/anuragsoni/fetch/issues"
+dev-repo: "git+https://github.com/anuragsoni.git"
+build: [
+  ["dune" "subst"] {pinned}
+  ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "runtest" "-p" name] {with-test}
+]
+depends: [
+  "ocaml" {>= "4.04.2"}
+  "dune" {build}
+  "httpaf"
+  "httpaf-async"
+]
+synopsis: """
+A small wrapper around Httpaf_async's client module
+"""
