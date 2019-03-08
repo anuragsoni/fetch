@@ -4,7 +4,8 @@ open Async
 type t =
   { m : Httpaf.Method.t
   ; uri : Uri.t
-  ; headers : Httpaf.Headers.t }
+  ; headers : Httpaf.Headers.t
+  ; body : string option }
 
 let uri t = t.uri
 
@@ -19,12 +20,15 @@ let as_string b = b >>| fun buf -> Bytes.to_string (Buffer.to_bytes buf)
 let create m uri =
   { m
   ; uri
-  ; headers = Httpaf.Headers.of_list [("host", Uri.host_with_default uri)] }
+  ; headers = Httpaf.Headers.of_list [("host", Uri.host_with_default uri)]
+  ; body = None }
 
 
 let add_header ~key ~value t =
   {t with headers = Httpaf.Headers.add t.headers key value}
 
+
+let add_body body t = {t with body}
 
 let response_handler finished response response_body =
   match response with
@@ -47,7 +51,14 @@ let response_handler finished response response_body =
 
 
 let run req =
-  let {uri; headers; m} = req in
+  let {uri; headers; m; _} = req in
+  let body = Option.value req.body ~default:"" in
+  let headers =
+    Httpaf.Headers.add_unless_exists
+      headers
+      "Content-Length"
+      (string_of_int (String.length body))
+  in
   let host = Uri.host_with_default uri in
   let port = get_port uri in
   let where_to_connect = Tcp.Where_to_connect.of_host_and_port {host; port} in
@@ -68,5 +79,6 @@ let run req =
       socket
       (Httpaf.Request.create ~headers m (Uri.path_and_query uri))
   in
+  Httpaf.Body.write_string request_body body ;
   Httpaf.Body.close_writer request_body ;
   Ivar.read finished

@@ -15,5 +15,7 @@ module Request : sig
 
   val add_header : key:string -> value:string -> t -> t
 
+  val add_body : string option -> t -> t
+
   val run : t -> Buffer.t Async.Deferred.t
 end
