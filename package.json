@@ -1,0 +1,40 @@
+{
+  "name": "fetch",
+  "version": "0.0.0",
+  "description": "Simple REST client",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/anuragsoni/fetch.git"
+  },
+  "keywords": [
+    "ocaml",
+    "REST",
+    "http"
+  ],
+  "author": "Anurag Soni <anurag@sonianurag.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/anuragsoni/fetch/issues"
+  },
+  "homepage": "https://github.com/anuragsoni/fetch#readme",
+  "esy": {
+    "build": "dune build"
+  },
+  "scripts": {
+    "build:example": "esy dune build example/client_example.exe"
+  },
+  "dependencies": {
+    "ocaml": "~4.7.0",
+    "@opam/dune": "*",
+    "@opam/lwt": "*",
+    "@opam/logs": "*",
+    "@opam/httpaf": "*",
+    "@opam/httpaf-lwt": "*",
+    "@opam/fmt": "*",
+    "@opam/uri": "*"
+  },
+  "resolutions": {
+    "@opam/httpaf": "inhabitedtype/httpaf:httpaf.opam#53042e514760fc51b1cf3c5dff08bcc93e8c99a4",
+    "@opam/httpaf-lwt": "inhabitedtype/httpaf:httpaf-lwt.opam#53042e514760fc51b1cf3c5dff08bcc93e8c99a4"
+  }
+}
