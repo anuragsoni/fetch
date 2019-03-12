@@ -26,7 +26,8 @@
     "promote": "esy dune promote"
   },
   "devDependencies": {
-    "@opam/ocamlformat": "*"
+    "@opam/ocamlformat": "*",
+    "@opam/merlin": "*"
   },
   "dependencies": {
     "ocaml": "~4.7.0",
