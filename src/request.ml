@@ -42,7 +42,8 @@ let response_handler finished response response_body =
       Httpaf.Body.schedule_read response_body ~on_read ~on_eof
   | resp ->
       failwith
-        (String.concat ""
+        (String.concat
+           ""
            [ "Todo: do something better here. "
            ; Httpaf.Status.to_string resp.status
            ; ". "
