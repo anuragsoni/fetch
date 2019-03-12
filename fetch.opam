@@ -14,8 +14,15 @@ depends: [
   "ocaml" {>= "4.04.2"}
   "dune" {build}
   "uri"
+  "logs"
+  "lwt"
+  "fmt"
   "httpaf"
-  "httpaf-async"
+  "httpaf-lwt"
+]
+pin-depends: [
+  [ "httpaf.dev" "git+https://github.com/inhabitedtype/httpaf.git#53042e514760fc51b1cf3c5dff08bcc93e8c99a4" ]
+  [ "httpaf-lwt.dev" "git+https://github.com/inhabitedtype/httpaf.git#53042e514760fc51b1cf3c5dff08bcc93e8c99a4" ]
 ]
 synopsis: """
 A small wrapper around Httpaf_async's client module
