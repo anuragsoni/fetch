@@ -21,7 +21,12 @@
     "build": "dune build"
   },
   "scripts": {
-    "build:example": "esy dune build example/client_example.exe"
+    "build:example": "esy dune build example/client_example.exe",
+    "format": "esy dune build @fmt",
+    "promote": "esy dune promote"
+  },
+  "devDependencies": {
+    "@opam/ocamlformat": "*"
   },
   "dependencies": {
     "ocaml": "~4.7.0",
