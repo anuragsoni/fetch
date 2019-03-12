@@ -14,7 +14,9 @@ let headers t = t.headers
 
 let get_port u = match Uri.port u with Some p -> p | None -> 80
 
-let as_string b = Lwt.map (fun buf -> Bytes.to_string (Buffer.to_bytes buf)) b
+let respond_as_string b =
+  Lwt.map (fun buf -> Bytes.to_string (Buffer.to_bytes buf)) b
+
 
 let create m uri =
   { m

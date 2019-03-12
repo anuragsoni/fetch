@@ -38,7 +38,7 @@ let lwt_reporter () =
 let main port m host () =
   let m' = Httpaf.Method.of_string m in
   let u = Uri.with_port (Uri.of_string host) (Some port) in
-  Request.create m' u |> Request.run |> Request.as_string
+  Request.create m' u |> Request.run |> Request.respond_as_string
 
 
 let () =

@@ -9,7 +9,7 @@ module Request : sig
 
   val get_port : Uri.t -> int
 
-  val as_string : Buffer.t Lwt.t -> string Lwt.t
+  val respond_as_string : Buffer.t Lwt.t -> string Lwt.t
 
   val create : Httpaf.Method.t -> Uri.t -> t
 
