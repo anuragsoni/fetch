@@ -1,5 +1,5 @@
 {
-  "checksum": "b7c3299a63a0ec4efa32a33eeb4c6e1e",
+  "checksum": "789f1e556d7561cd83f4d7b0611db701",
   "root": "fetch@link-dev:./package.json",
   "node": {
     "ocaml@4.7.1004@d41d8cd9": {
@@ -28,7 +28,8 @@
       "overrides": [],
       "dependencies": [
         "ocaml@4.7.1004@d41d8cd9", "@opam/uri@opam:2.2.0@dfca6d0f",
-        "@opam/lwt@opam:4.1.0@111fc2bf", "@opam/logs@opam:0.6.2@8f7a792d",
+        "@opam/lwt_ppx@opam:1.2.1@db1172a7", "@opam/lwt@opam:4.1.0@111fc2bf",
+        "@opam/logs@opam:0.6.2@8f7a792d",
         "@opam/httpaf-lwt@github:inhabitedtype/httpaf:httpaf-lwt.opam#53042e514760fc51b1cf3c5dff08bcc93e8c99a4@d41d8cd9",
         "@opam/httpaf@github:inhabitedtype/httpaf:httpaf.opam#53042e514760fc51b1cf3c5dff08bcc93e8c99a4@d41d8cd9",
         "@opam/fmt@opam:0.8.5@01e38a4e", "@opam/dune@opam:1.8.2@511996a8"
@@ -323,6 +324,34 @@
         "@opam/base@opam:v0.11.1@6ff71eb3"
       ]
     },
+    "@opam/ppx_tools_versioned@opam:5.2.1@95275a75": {
+      "id": "@opam/ppx_tools_versioned@opam:5.2.1@95275a75",
+      "name": "@opam/ppx_tools_versioned",
+      "version": "opam:5.2.1",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://opam.ocaml.org/cache/md5/1a/1ae6ae43ec161fbbf12c2b4d3a7e26f5#md5:1ae6ae43ec161fbbf12c2b4d3a7e26f5",
+          "archive:https://github.com/ocaml-ppx/ppx_tools_versioned/archive/5.2.1.tar.gz#md5:1ae6ae43ec161fbbf12c2b4d3a7e26f5"
+        ],
+        "opam": {
+          "name": "ppx_tools_versioned",
+          "version": "5.2.1",
+          "path": "esy.lock/opam/ppx_tools_versioned.5.2.1"
+        }
+      },
+      "overrides": [],
+      "dependencies": [
+        "ocaml@4.7.1004@d41d8cd9",
+        "@opam/ocaml-migrate-parsetree@opam:1.2.0@5b3aa0d3",
+        "@opam/jbuilder@opam:transition@58bdfe0a",
+        "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [
+        "ocaml@4.7.1004@d41d8cd9",
+        "@opam/ocaml-migrate-parsetree@opam:1.2.0@5b3aa0d3"
+      ]
+    },
     "@opam/ppx_sexp_conv@opam:v0.11.2@6626e527": {
       "id": "@opam/ppx_sexp_conv@opam:v0.11.2@6626e527",
       "name": "@opam/ppx_sexp_conv",
@@ -435,7 +464,7 @@
         }
       ],
       "dependencies": [
-        "ocaml@4.7.1004@d41d8cd9", "@opam/conf-m4@opam:1@6ff7c44d",
+        "ocaml@4.7.1004@d41d8cd9", "@opam/conf-m4@opam:1@dd7dde42",
         "@esy-ocaml/substs@0.0.1@d41d8cd9"
       ],
       "devDependencies": [ "ocaml@4.7.1004@d41d8cd9" ]
@@ -542,6 +571,38 @@
       "devDependencies": [
         "ocaml@4.7.1004@d41d8cd9", "@opam/yojson@opam:1.7.0@2d92307e",
         "@opam/ocamlfind@opam:1.8.0@96572762"
+      ]
+    },
+    "@opam/lwt_ppx@opam:1.2.1@db1172a7": {
+      "id": "@opam/lwt_ppx@opam:1.2.1@db1172a7",
+      "name": "@opam/lwt_ppx",
+      "version": "opam:1.2.1",
+      "source": {
+        "type": "install",
+        "source": [
+          "archive:https://opam.ocaml.org/cache/md5/e9/e919bee206f18b3d49250ecf9584fde7#md5:e919bee206f18b3d49250ecf9584fde7",
+          "archive:https://github.com/ocsigen/lwt/archive/4.1.0.tar.gz#md5:e919bee206f18b3d49250ecf9584fde7"
+        ],
+        "opam": {
+          "name": "lwt_ppx",
+          "version": "1.2.1",
+          "path": "esy.lock/opam/lwt_ppx.1.2.1"
+        }
+      },
+      "overrides": [],
+      "dependencies": [
+        "ocaml@4.7.1004@d41d8cd9",
+        "@opam/ppx_tools_versioned@opam:5.2.1@95275a75",
+        "@opam/ocaml-migrate-parsetree@opam:1.2.0@5b3aa0d3",
+        "@opam/lwt@opam:4.1.0@111fc2bf",
+        "@opam/jbuilder@opam:transition@58bdfe0a",
+        "@esy-ocaml/substs@0.0.1@d41d8cd9"
+      ],
+      "devDependencies": [
+        "ocaml@4.7.1004@d41d8cd9",
+        "@opam/ppx_tools_versioned@opam:5.2.1@95275a75",
+        "@opam/ocaml-migrate-parsetree@opam:1.2.0@5b3aa0d3",
+        "@opam/lwt@opam:4.1.0@111fc2bf"
       ]
     },
     "@opam/lwt@opam:4.1.0@111fc2bf": {
@@ -922,8 +983,8 @@
       "dependencies": [ "@esy-ocaml/substs@0.0.1@d41d8cd9" ],
       "devDependencies": []
     },
-    "@opam/conf-m4@opam:1@6ff7c44d": {
-      "id": "@opam/conf-m4@opam:1@6ff7c44d",
+    "@opam/conf-m4@opam:1@dd7dde42": {
+      "id": "@opam/conf-m4@opam:1@dd7dde42",
       "name": "@opam/conf-m4",
       "version": "opam:1",
       "source": {

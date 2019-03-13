@@ -1,37 +1,38 @@
 open Lwt.Infix
 
+let src = Logs.Src.create "fetch"
+
 type t =
   { m : Httpaf.Method.t
   ; uri : Uri.t
-  ; headers : Httpaf.Headers.t
+  ; req : Httpaf.Request.t
   ; body : string option }
+
+type error = Http of Httpaf.Client_connection.error
 
 let uri t = t.uri
 
 let m t = t.m
 
-let headers t = t.headers
-
 let get_port u = match Uri.port u with Some p -> p | None -> 80
 
-let respond_as_string b =
-  Lwt.map (fun buf -> Bytes.to_string (Buffer.to_bytes buf)) b
+let create m uri headers body =
+  let req = Httpaf.Request.create ~headers m (Uri.path_and_query uri) in
+  {m; uri; req; body}
 
 
-let create m uri =
-  { m
-  ; uri
-  ; headers = Httpaf.Headers.of_list [("host", Uri.host_with_default uri)]
-  ; body = None }
+let get ?headers:(h = Httpaf.Headers.empty) uri = create `GET uri h None
+
+let post ?headers:(h = Httpaf.Headers.empty) ?body uri =
+  create `POST uri h body
 
 
-let add_header ~key ~value t =
-  {t with headers = Httpaf.Headers.add t.headers key value}
-
+let put ?headers:(h = Httpaf.Headers.empty) ?body uri = create `PUT uri h body
 
 let add_body body t = {t with body}
 
 let response_handler finished response response_body =
+  Logs.debug ~src (fun m -> m "%a" Httpaf.Response.pp_hum response) ;
   match response with
   | {Httpaf.Response.status = `OK; _} ->
       let b = Buffer.create 1028 in
@@ -40,26 +41,26 @@ let response_handler finished response response_body =
         Bigstringaf.blit_to_bytes bs ~src_off:off b' ~dst_off:0 ~len ;
         Buffer.add_bytes b b' ;
         Httpaf.Body.schedule_read response_body ~on_read ~on_eof
-      and on_eof () = Lwt.wakeup finished b in
+      and on_eof () = Lwt.wakeup_later finished (Ok (Buffer.contents b)) in
       Httpaf.Body.schedule_read response_body ~on_read ~on_eof
   | resp ->
-      failwith
-        (String.concat
-           ""
-           [ "Todo: do something better here. "
-           ; Httpaf.Status.to_string resp.status
-           ; ". "
-           ; resp.reason ])
+      Logs.err ~src (fun m ->
+          m
+            "TODO: do something better here. Status code %s. Reason: %s"
+            (Httpaf.Status.to_string resp.status)
+            resp.reason ) ;
+      Lwt.wakeup_later finished (Error "TODO: Do something better")
 
 
-let run req =
-  let {uri; headers; m; _} = req in
-  let body = match req.body with Some body -> body | None -> "" in
+let run t =
+  let {uri; req; _} = t in
+  let body = match t.body with Some body -> body | None -> "" in
   let headers =
-    Httpaf.Headers.add_unless_exists
-      headers
-      "Content-Length"
-      (string_of_int (String.length body))
+    Httpaf.Headers.add_list
+      req.headers
+      [ ("User-Agent", "fetch")
+      ; ("Host", Uri.host_with_default uri)
+      ; ("Content-Length", string_of_int (String.length body)) ]
   in
   let host = Uri.host_with_default uri in
   let port = get_port uri in
@@ -71,18 +72,14 @@ let run req =
   let response_received, notify_response_received = Lwt.wait () in
   let request_body =
     Httpaf_lwt.Client.request
-      ~error_handler:(fun e ->
-        match e with
-        | `Exn e ->
-            raise e
-        | `Invalid_response_body_length _ ->
-            failwith "invalid response length"
-        | `Malformed_response r ->
-            failwith r )
+      ~error_handler:(fun _e ->
+        Lwt.wakeup_later
+          notify_response_received
+          (Error "TODO: do something better here") )
       ~response_handler:(response_handler notify_response_received)
       socket
-      (Httpaf.Request.create ~headers m (Uri.path_and_query uri))
+      {t.req with headers}
   in
   Httpaf.Body.write_string request_body body ;
   Httpaf.Body.close_writer request_body ;
-  response_received
+  response_received >>= Lwt_result.lift

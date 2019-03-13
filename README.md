@@ -2,6 +2,14 @@
 
 To pin the development version: `opam pin add fetch https://github.com/anuragsoni/fetch.git`
 
+## Example
+```ocaml
+let uri = Uri.of_string "https://httpbin.org/get" in
+match%lwt (Request.get uri |> Request.run) with
+| Ok r -> (* do something with response *)
+| Error e -> (* do something with error *)
+```
+
 # Local Development
 
 ## Using [esy](https://esy.sh/)

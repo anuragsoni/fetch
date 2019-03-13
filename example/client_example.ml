@@ -2,6 +2,8 @@ open Fetch
 
 let ( >>| ) = Lwt.map
 
+let ( >>=? ) = Lwt_result.bind
+
 let lwt_reporter () =
   let buf_fmt ~like =
     let b = Buffer.create 512 in
@@ -35,28 +37,26 @@ let lwt_reporter () =
   {Logs.report}
 
 
-let main port m host () =
-  let m' = Httpaf.Method.of_string m in
-  let u = Uri.with_port (Uri.of_string host) (Some port) in
-  Request.create m' u |> Request.run |> Request.respond_as_string
+let main () =
+  let log_response resp =
+    match resp with
+    | Ok r ->
+        Logs_lwt.info (fun m -> m "%s\n" r)
+    | Error e ->
+        Logs_lwt.err (fun m -> m "%s\n" e)
+  in
+  let get_url = Uri.of_string "http://httpbin.org/get" in
+  let post_url = Uri.of_string "http://httpbin.org/post" in
+  let%lwt get_response = Request.get get_url |> Request.run
+  and post_response = Request.post ~body:"Foobar" post_url |> Request.run in
+  let%lwt () = log_response get_response
+  and () = log_response post_response in
+  Lwt.return ()
 
 
 let () =
   Logs.set_level (Some Logs.Info) ;
   Logs.set_reporter (lwt_reporter ()) ;
-  let host = ref None in
-  let port = ref 80 in
-  Arg.parse
-    [("-p", Set_int port, " Port number (80 by default)")]
-    (fun host_argument -> host := Some host_argument)
-    "get_example.exe [-p N] HOST" ;
-  let host =
-    match !host with
-    | None ->
-        failwith "No hostname provided"
-    | Some host ->
-        host
-  in
   Lwt_main.run
-    (Lwt.bind (main !port "GET" host ()) (fun response ->
-         Logs_lwt.info (fun m -> m "Responded with %s" response) ))
+    (Lwt.bind (main ()) (fun () ->
+         Logs_lwt.info (fun m -> m "Finished all HTTP calls.") ))
