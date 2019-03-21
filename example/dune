@@ -2,4 +2,4 @@
  (names client_example)
  (preprocess
   (pps lwt_ppx))
- (libraries fetch uri logs.lwt logs.fmt fmt))
+ (libraries fetch uri logs.lwt logs.fmt fmt fmt.tty))
