@@ -5,7 +5,7 @@ To pin the development version: `opam pin add fetch https://github.com/anuragson
 ## Example
 ```ocaml
 let uri = Uri.of_string "https://httpbin.org/get" in
-match%lwt (Request.get uri |> Request.run) with
+match%lwt (get uri |> run) with
 | Ok r -> (* do something with response *)
 | Error e -> (* do something with error *)
 ```
