@@ -1,5 +1,5 @@
 (executables
  (names client_example)
  (preprocess
-  (pps lwt_ppx))
+  (pps ppx_let))
  (libraries fetch uri logs.lwt logs.fmt fmt fmt.tty))

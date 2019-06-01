@@ -17,9 +17,6 @@ type response =
 type error = Http of Client_connection.error
 
 val get : ?headers:Headers.t -> Uri.t -> t
-
 val post : ?headers:Headers.t -> ?body:string -> Uri.t -> t
-
 val put : ?headers:Headers.t -> ?body:string -> Uri.t -> t
-
 val run : t -> (response, error) Lwt_result.t
